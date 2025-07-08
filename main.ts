@@ -13,11 +13,12 @@ const SUPPORTED = new Set(["NGN", "USD", "EUR"]);
 const TAX_RATE: Record<string, number> = { NGN: 0.3, USD: 0.15, EUR: 0.15 };
 
 function formatUSD(val: number): string {
-  return chalk.green(`$${val.toFixed(2)}`);
+  return chalk.green(`$${val.toFixed(3)}`);
 }
+
 function formatLocal(val: number, curr: string): string {
   const locale = curr === "NGN" ? "en-NG" : curr === "EUR" ? "de-DE" : "en-US";
-  return chalk.blue(
+  return chalk.blueBright(
     new Intl.NumberFormat(locale, {
       style: "currency",
       currency: curr,
@@ -26,9 +27,8 @@ function formatLocal(val: number, curr: string): string {
     }).format(val)
   );
 }
-function label(text: string) {
-  return chalk.bold.yellow(text.padEnd(30));
-}
+
+const label = (text: string) => chalk.bold.yellow(text.padEnd(30));
 
 async function prompt(q: string) {
   return new Promise<string>((res) => rl.question(chalk.cyan(q), res));
@@ -63,30 +63,22 @@ async function main() {
     }
   }
 
-  // 1. Medium fees
-  const platform = gross * 0.0025;
-  const compliance = 2;
-  const afterMedium = gross - platform - compliance;
-
-  // 2. Tax Withholding
+  // 1. Tax Withholding
   const tax = gross * TAX_RATE[dest];
   const afterTax = gross - tax;
 
-  // 3. Stripe
+  // 2. Stripe
   const fixed = 2.25;
   const border = afterTax * 0.0025;
   const afterStripe = afterTax - fixed - border;
 
-  // 4. Convert
+  // 3. Convert
   const localAmt = afterStripe * rate;
 
   rl.close();
 
   console.log("\n" + chalk.underline.bold("💰 Detailed Payout Breakdown"));
   console.log(`${label("Gross (USD)")}: ${formatUSD(gross)}`);
-  console.log(`${label("Platform Fee (0.25%)")}: -${formatUSD(platform)}`);
-  console.log(`${label("Compliance Fee (flat)")}: -${formatUSD(compliance)}`);
-  console.log(`${label("After Medium")}: ${formatUSD(afterMedium)}\n`);
 
   console.log(
     `${label(`Withholding (${TAX_RATE[dest] * 100}%)`)}: -${formatUSD(tax)}`
@@ -95,10 +87,9 @@ async function main() {
 
   console.log(`${label("Stripe Fixed Fee")}: -${formatUSD(fixed)}`);
   console.log(`${label("Cross-border Fee (~0.5%)")}: -${formatUSD(border)}`);
-  //   console.log(`${label('FX Fee (2%)')}: -${formatUSD(fxFee)}`);
   console.log(`${label("After Stripe")}: ${formatUSD(afterStripe)}\n`);
 
-  console.log(`${label(`FX Rate (1 USD → ${dest})`)}: ${rate.toFixed(4)}`);
+  console.log(`${label(`FX Rate (1 USD → ${dest})`)}: ${rate.toFixed(2)}`);
   console.log(
     `${label(`Converted (${dest})`)}: ${formatLocal(localAmt, dest)}`
   );
