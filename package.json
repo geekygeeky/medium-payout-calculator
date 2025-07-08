@@ -1,0 +1,38 @@
+{
+  "name": "medium-payout-calculator",
+  "version": "1.0.0",
+  "description": "CLI tool to calculate Medium payout after fees, U.S. tax withholding, Stripe fees, and convert to preferred currency",
+  "main": "main.ts",
+  "scripts": {
+    "start": "ts-node payout.ts",
+    "build": "tsc",
+    "format": "prettier --write .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geekygeeky/medium-payout-calculator.git"
+  },
+  "keywords": [
+    "medium",
+    "payout",
+    "stripe",
+    "tax",
+    "calculator",
+    "ngn"
+  ],
+  "author": "GeekyGeeky",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/geekygeeky/medium-payout-calculator/issues"
+  },
+  "homepage": "https://github.com/geekygeeky/medium-payout-calculator#readme",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "chalk": "^5.4.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
