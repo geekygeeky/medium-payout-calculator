@@ -12,9 +12,7 @@ const rl = readline.createInterface({
 const SUPPORTED = new Set(["NGN", "USD", "EUR"]);
 const TAX_RATE: Record<string, number> = { NGN: 0.3, USD: 0.15, EUR: 0.15 };
 
-function formatUSD(val: number): string {
-  return chalk.green(`$${val.toFixed(3)}`);
-}
+const formatUSD = (val: number): string => chalk.green(`$${val.toFixed(2)}`);
 
 function formatLocal(val: number, curr: string): string {
   const locale = curr === "NGN" ? "en-NG" : curr === "EUR" ? "de-DE" : "en-US";
