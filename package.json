@@ -13,7 +13,7 @@
     "outputPath": "build"
   },
   "scripts": {
-    "start": "ts-node cmd/main.ts",
+    "start": "bun cmd/main.ts",
     "build": "tsc",
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -41,7 +41,7 @@
     "chalk": "^5.4.1"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2",
+    "@types/node": "^26.4.1",
     "typescript": "^5.8.3"
   }
 }
