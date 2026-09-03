@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import readline from "node:readline";
-import axios from "axios";
 import chalk from "chalk";
+import { fetchExchangeRate } from "@/services/exchange";
 import { SUPPORTED, TAX_RATE } from "@/utils/constants";
 import { formatLocal } from "@/utils/formatter";
 
@@ -38,14 +38,12 @@ async function main() {
 	// Fetch FX rate using free API
 	let rate = 1;
 	if (dest !== "USD") {
-		try {
-			const res = await axios.get(`https://open.er-api.com/v6/latest/USD`);
-			rate = res.data.rates[dest];
-			if (!rate) throw new Error("Rate not found");
-		} catch {
-			console.error(chalk.red("Failed to fetch exchange rate."));
+		const result = await fetchExchangeRate(dest);
+		if (result.error) {
+			console.error(chalk.red(result.message));
 			process.exit(1);
 		}
+		rate = result.rate;
 	}
 
 	// 1. Tax Withholding
