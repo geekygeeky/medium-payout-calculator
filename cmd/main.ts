@@ -3,28 +3,15 @@
 import readline from "node:readline";
 import axios from "axios";
 import chalk from "chalk";
+import { SUPPORTED, TAX_RATE } from "@/utils/constants";
+import { formatLocal } from "@/utils/formatter";
 
 const rl = readline.createInterface({
 	input: process.stdin,
 	output: process.stdout,
 });
 
-const SUPPORTED = new Set(["NGN", "USD", "EUR"]);
-const TAX_RATE: Record<string, number> = { NGN: 0.3, USD: 0.15, EUR: 0.15 };
-
 const formatUSD = (val: number): string => chalk.green(`$${val.toFixed(2)}`);
-
-function formatLocal(val: number, curr: string): string {
-	const locale = curr === "NGN" ? "en-NG" : curr === "EUR" ? "de-DE" : "en-US";
-	return chalk.blueBright(
-		new Intl.NumberFormat(locale, {
-			style: "currency",
-			currency: curr,
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2,
-		}).format(val),
-	);
-}
 
 const label = (text: string) => chalk.bold.yellow(text.padEnd(30));
 
